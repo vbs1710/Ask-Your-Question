@@ -1,5 +1,4 @@
 // Example starter JavaScript for disabling form submissions if there are invalid fields
-// Example starter JavaScript for disabling form submissions if there are invalid fields
 (function() {
   'use strict';
   window.addEventListener('load', function() {
@@ -17,5 +16,3 @@
     });
   }, false);
 })();
-
-    // ye jo ologic h humne direct reference lia h matlaB Ki copy kiya h bootstraP SE

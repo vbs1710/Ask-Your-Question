@@ -44,6 +44,7 @@ app.set('view engine','ejs');
 app.engine('ejs',ejsMate);
 app.use(express.urlencoded({ extended:true }));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname,'public'))); 
 
 const sessionConfig = {
     name: 'session',
@@ -52,7 +53,7 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        // secure:true,  // jab deploy krenge tab isko uncomment kr skte h ..kyuki localhost http pr rhta h na ki https pr toj jab hum deploy krenge toh vo https pr rhega to humara secure wala part bhi done ho jaayega....agar isko localhost mei true kr dunga toh login krne pr bhi login nhi hoga aur mei khudke account se banaya hua campground,review edit aur delete nhi kr paaunga....
+        // secure:true,  
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
@@ -60,23 +61,23 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(flash());
-// jo niche 3 line likhi h inko res.locals wale part ke upar hi likhna h hamesha warna authorisation wale part mei problem aayegi....successfully wasted 4 days on this
+
 app.use(passport.initialize());
-app.use(passport.session()); // isko   app.use(session(sessionConfig)); iske baad hi likhna h varna isko pata nhi rhega ki session kya h
+app.use(passport.session()); 
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.use((req,res,next)=>{
-    // console.log(req.session) isko consolelog krne pr session mei hum returnTo wala deks skte h agar vo trigger hua hoga toh 
-    res.locals.success = req.flash('success');     // ye middleware lagane se mei flash mei jo bhi string pass krunga usko kisi bhi template mei access kr skta hu...for eg mujhe show tempelate ke router mei koi variable pass nhi krana padega ki jisse mei flash wali string ko access kr sku....middleware ki help se direct access ho jaayega
+    
+    res.locals.success = req.flash('success');     
     res.locals.error = req.flash('error');
-    res.locals.currentuser = req.user; // req.user humei user ka email , username , id(mongoose wali) .... ab mei ise pure project mei kahi bhi use kr skta hu...ab hum login aur register wala option navbar mei tab hi dikhayenge jab currentUser exist nhi krega ..aur agar currentUser exist krega toh hum sirf logout wala option show krenge.... req.user humei passport ki help se mila h ... passport sab kuch behind the scene kr deta h .....
+    res.locals.currentuser = req.user; 
     next();
 })
 
 
 
-passport.serializeUser(User.serializeUser());   // cookie ko bana dega aur store kr lega login krne pr
-passport.deserializeUser(User.deserializeUser()); // cookie ko destroy kr dega logout krne pr :)
+passport.serializeUser(User.serializeUser());   
+passport.deserializeUser(User.deserializeUser()); 
 
 
 
@@ -93,8 +94,12 @@ app.get('/',catchAsync(async(req,res)=>{
         }
     }).populate('author');
     // console.log(quest); 
-    res.render('mainPage2',{quest})
+    res.render('mainPage3',{quest})
 }))
+
+// app.get('/mainpage3',(req,res)=>{
+//     res.render('mainpage3.ejs')
+// })
 
 
 
@@ -115,7 +120,3 @@ app.listen(3000,()=>{
     console.log("App listening on port 3000");
 })
 
-
-// saara main kaam ho gya bass show page pr button hide krna wala logic kaam nhi kr rha(AB KAR GYA)
-//  ..... isko sahi krne ke baad image add krne ka option lagana h question aur answer dono ke form mei(DONE)
-//  ..fir styling krni h bootstrap se .... fir security wala part....

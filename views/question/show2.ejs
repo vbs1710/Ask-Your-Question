@@ -1,213 +1,102 @@
 <% layout('layouts/boilerplate.ejs') %>
-<link rel="stylesheet" href="/stylesheets/show.css">
-<style>
-.show__both{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    /* align-items: center; */
-    align-items: baseline;
-    padding-left: 30px; 
- padding-right: 30px;
-}
-.show__question {
-  /* border: 2px solid red; */
-  border: 2px inset lightgray;
-  border-radius: 10px;
-  background-color: whitesmoke;
-  height: auto;
-  width: 700px;
-  margin: 10px;
-  padding: 10px;
-position: sticky;
-  top: 25px;
-  }
-.question__answer {
-  /* border: 2px solid green; */
-  border: 2px inset lightgray;
-  border-radius: 10px;
-  height: auto;
-  width: 700px;
-  margin: 10px;
-    background-color: whitesmoke;
-    padding: 10px;
-    /* position: absolute; */
-    /* margin-left: 750px; */
-
-}
-.question,.answer{
-    font-weight: 700;
-}
-.imageAdjust{
-    max-height: 600px;
-    max-width: auto;
-    height: auto;
-    width: auto;
-    margin: 10px;
-    border: 2px solid darkmagenta;
-}
-.question__author{
-    display: flex;
-    justify-content: space-between;
-}
-.question__answer{
-    display: flex;
-    flex-direction: column;
-}
-.question__buttons{
-    display: flex;
-    justify-content: space-evenly;
-}
-.deleteButton,.answerButton,.editButton{
-    margin-bottom: 5px;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.img-row{
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-grid-gap: 15px;
-}
-
-.column img {
-  opacity: 0.8; 
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-.column img:hover {
-  opacity: 1;
-  transform: scale(1.02);
-  transition: .3s;
-}
-
-/* The expanding image container */
-.container {
-  position: relative;
-  display: none;
-  top: 20px;
-  /* bottom: 20px; */
-  margin-bottom: 30px;
-}
-
-/* Expanding image text */
-#imgtext {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  color: white;
-  font-size: 20px;
-}
-
-/* Closable button inside the expanded image */
-.closebtn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  color: white;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-
-.imageShow{
-    display: flex;
-}
-
-</style>
+<link rel="stylesheet" href="/stylesheets/show.css" />
 
 <div class="show__both">
-    <div class="show__question">
-        <div class="question">
-            Question : <%= question.question %>
-        </div>
-        <div class="question__author">
-           <i class="text-muted"> Posted By : <%= question.author.username %> </i>
-           <i class="text-muted">Posted On : <%= question.dateOfAsking %></i>
-        </div>
-        <% if(question.images.length !=0 ){ %>
-        <div class="img-row">
-            <% for(let i of question.images){ %> 
-            <div class="column">
-                <img src="<%= i.url %>" alt="" onclick="openImage(this);">
-            </div>
-            <% } %> 
-        </div>
-        
-        <div class="container">
-            <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-            <img id="expandedImg" style="width:100%">
-            <div id="imgtext"></div>
-        </div>
-        <% } %>
-        <div class="question__buttons">
-            <%if( currentuser && question.author.equals(currentuser._id)) {%>
-                <form action="/question/<%= question._id %>?_method=DELETE" method="POST" class="deleteButton">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
-                
-            <% } %>
-            <a href="/question/<%= question._id %>/ans" class="btn btn-sm btn-success answerButton">Answer</a>
-        </div>
-        <hr>
+  <div class="show__question">
+    <div class="question">Question : <%= question.question %></div>
+    <div class="question__author">
+      <i class="text-muted"> Posted By : <%= question.author.username %> </i>
+      <i class="text-muted">Posted On : <%= question.dateOfAsking %></i>
     </div>
-    
-    <div class="question__answer">
-        <% if (question.answer.length) { %>
-            <% for(let a of question.answer){ %>
-                <div class="wholeAnswer">
-                    <div class="answer">
-                        Answer : <%= a.answer %>
-                    </div>
-                    <div class="question__author">
-                        <i class="text-muted"> Posted By : <%= a.author.username %> </i>
-                        <i class="text-muted">Posted On : <%= a.dateOfAnswer %></i>
-                    </div>
-                    
-                    <% if(a.images.length !=0){ %>
-                        <div class="imageShow">
-                        <div class="img-row">
-                            <% for(let i of a.images){ %> 
-                            <div class="column">
-                                <img src="<%= i.url %>" alt="" onclick="openImage(this);">
-                            </div>
-                            <% } %> 
-                        </div>
-                        
-                        <div class="container">
-                            <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
-                            <img id="expandedImg" style="width:100%">
-                            <div id="imgtext"></div>
-                        </div>
-                        </div>
+    <% if(question.images.length !=0 ){ %>
+    <div class="img-row">
+      <% for(let i of question.images){ %>
+      <div class="column">
+        <img src="<%= i.url %>" alt="" onclick="openImage(this);" />
+      </div>
+      <% } %>
+    </div>
 
-                    <% } %>
-                    <% if( currentuser && a.author.equals(currentuser._id)) {%>
-                        <form action="/question/<%= question._id %>/ans/<%= a._id %>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm btn-info">Delete answer</button>
-                        </form>
-                    <% } %>
-                    <hr>
-                </div>
-            <% } %>
-        <% } %>
-        <% if (!question.answer.length){ %>
-            <p> No Answers for this question </p>
-        <% } %>
-    </div>   
+    <div class="container">
+      <span onclick="this.parentElement.style.display='none'" class="closebtn"
+        >&times;</span
+      >
+      <img id="expandedImg" style="width: 100%" />
+      <div id="imgtext"></div>
+    </div>
+    <% } %>
+    <div class="question__buttons">
+      <%if( currentuser && question.author.equals(currentuser._id)) {%>
+      <form
+        action="/question/<%= question._id %>?_method=DELETE"
+        method="POST"
+        class="deleteButton"
+      >
+        <button class="btn btn-danger">Delete</button>
+      </form>
+
+      <% } %>
+      <a
+        href="/question/<%= question._id %>/ans"
+        class="btn btn-sm btn-success answerButton"
+        >Answer</a
+      >
+    </div>
+    <hr />
+  </div>
+
+  <div class="question__answer">
+    <% if (question.answer.length) { %> <% for(let a of question.answer){ %>
+    <div class="wholeAnswer">
+      <div class="answer">Answer : <%= a.answer %></div>
+      <div class="question__author">
+        <i class="text-muted"> Posted By : <%= a.author.username %> </i>
+        <i class="text-muted">Posted On : <%= a.dateOfAnswer %></i>
+      </div>
+
+      <% if(a.images.length !=0){ %>
+      <div class="imageShow">
+        <div class="img-row">
+          <% for(let i of a.images){ %>
+          <div class="column">
+            <img src="<%= i.url %>" alt="" onclick="openImage(this);" />
+          </div>
+          <% } %>
+        </div>
+
+        <div class="container">
+          <span
+            onclick="this.parentElement.style.display='none'"
+            class="closebtn"
+            >&times;</span
+          >
+          <img id="expandedImg" style="width: 100%" />
+          <div id="imgtext"></div>
+        </div>
+      </div>
+
+      <% } %> <% if( currentuser && a.author.equals(currentuser._id)) {%>
+      <form
+        action="/question/<%= question._id %>/ans/<%= a._id %>?_method=DELETE"
+        method="POST"
+      >
+        <button class="btn btn-sm btn-info">Delete answer</button>
+      </form>
+      <% } %>
+      <hr />
+    </div>
+    <% } %> <% } %> <% if (!question.answer.length){ %>
+    <p>No Answers for this question</p>
+    <% } %>
+  </div>
 </div>
 
 <script>
-    function openImage(imgs) {
-            var expandImg = document.getElementById("expandedImg");
-            var imgText = document.getElementById("imgtext");
-            expandImg.src = imgs.src;
-            imgText.innerHTML = imgs.alt;
-            expandImg.parentElement.style.display = "block";
-        }
+  function openImage(imgs) {
+    var expandImg = document.getElementById("expandedImg");
+    var imgText = document.getElementById("imgtext");
+    expandImg.src = imgs.src;
+    imgText.innerHTML = imgs.alt;
+    expandImg.parentElement.style.display = "block";
+  }
 </script>

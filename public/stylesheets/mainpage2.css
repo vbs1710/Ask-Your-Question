@@ -22,20 +22,21 @@ body {
   flex-direction: column;
 }
 .mainpage__questionAnswer {
-  max-width: 500px;
+  /* max-width: 500px; */
   background-color: whitesmoke;
   box-shadow: 5px 5px 5px silver;
   margin: 5px;
   padding: 10px;
   border-top: 1px solid gray;
   border-left: 1px solid gray;
+  border: 1px inset gray;
   border-radius: 5px;
   /* display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
   align-items: center; */
   height: 200px;
-  width: 500px;
+  width: 600px;
 }
 .question__question {
   display: flex;
@@ -60,8 +61,10 @@ body {
   /* border: 2px solid red; */
   background: darkgray;
   border-radius: 5px;
-  padding: 3px;
-  padding-left: 7px;
-  padding-right: 7px;
+  /* padding: 10px; */
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   /* margin: 5px; */
 }

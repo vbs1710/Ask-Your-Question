@@ -1,106 +1,41 @@
 <% layout('layouts/boilerplate.ejs') %>
   <!-- <link rel="stylesheet" href="/stylesheets/mainpage2.css"> -->
   <style>
-body{
-  background-color: rgb(236, 236, 236);
-}
-.mainpage{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* background-color: rgb(205, 201, 231); */
-}
 
-.question {
-  display: flex;
-  flex-direction: column;
-  /* border: 2px solid red; */
-  min-height: 50px;
-  height: auto;
-}
-.answer{
-  /* border: 2px solid blue; */
-  display: flex;
-  flex-direction: column;
-}
-.mainpage__questionAnswer{
-  /* max-width: 500px; */
-  background-color: whitesmoke;
-  box-shadow: 5px 5px 5px silver;
-  margin: 5px;
-  padding: 10px;
-  border-top: 1px solid gray;
-  border-left: 1px solid gray;
-  border: 1px inset gray ;
-  border-radius: 5px;
-  /* display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  align-items: center; */
-  height: 200px;
-  width: 600px;
-}
-.question__question{
-  display: flex;
-  justify-content: space-between;
-
-  font-weight: 700;
-  /* margin-left: 5px; */
-}
-.question__question p{
-  font-weight: 400;
-}
-.answer a{
-  text-decoration: none;
-  color: black;
-}
-.answer{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.button__viewMore{
-  /* border: 2px solid red; */
-  background: darkgray;
-  border-radius: 5px;
-  /* padding: 10px; */
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  /* margin: 5px; */
-}
-</style>
+  </style>
 
 
 
 
-<div class="mainpage">
-  <!-- <h1>All Questions</h1> -->
-  <% for (let q of quest){ %>
-  <div class="mainpage__questionAnswer">
-    <div class="wholeQuestionAndAnswer">
-      <div class="question">
-        <div class="question__question"><%= q.question %>
-        <p>Total answers : <%= q.answer.length %>
-        </p></div>
-        
-        <small class="text-muted"><i>asked by - <%= q.author.username %> on <%= q.dateOfAsking %></i></small>
-      </div>
-      <hr>
-      <div class="answer">
-        <div class="answer__ans">
-          <% if (q.answer.length) { %>
-            <div><%= q.answer[0].answer %></div>
-          <% } %>
-          <% if (!q.answer.length) { %>
-            <div> No Answers for the question</div>
-          <% } %>
+  <div class="mainpage">
+    <!-- <h1>All Questions</h1> -->
+    <% for (let q of quest){ %>
+      <div class="mainpage__questionAnswer">
+        <div class="wholeQuestionAndAnswer">
+          <div class="question">
+            <div class="question__question">
+              <%= q.question %>
+                <p>Total answers : <%= q.answer.length %>
+                </p>
+            </div>
+
+            <small class="text-muted"><i>asked by - <%= q.author.username %> on <%= q.dateOfAsking %></i></small>
           </div>
-          <div class="button__viewMore"><a href="/question/<%= q._id %>">View More</a></div>
+          <hr>
+          <div class="answer">
+            <div class="answer__ans">
+              <% if (q.answer.length) { %>
+                <div>
+                  <%= q.answer[0].answer %>
+                </div>
+                <% } %>
+                  <% if (!q.answer.length) { %>
+                    <div> No Answers for the question</div>
+                    <% } %>
+            </div>
+            <div class="button__viewMore"><a href="/question/<%= q._id %>">View More</a></div>
+          </div>
+        </div>
       </div>
-      </div>
+      <% } %>
   </div>
-  <% } %> 
-</div>

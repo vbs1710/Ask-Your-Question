@@ -20,17 +20,9 @@ router.post('/newQuestion',isLoggedIn,upload.array('image'),validateQuery,catchA
     var today = new Date();
     var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
     question.dateOfAsking=date;
-    // const d = new Date();
-    // let dd=11;
-    // // d.getDate();
-    // let mm=d.getMonth()+1;
-    // let yyyy=d.getFullYear();
-    // question.dateOfAsking = `${dd}-${mm}-${yyyy}`;
     question.author = req.user._id;
     question.images = req.files.map(f=>({url:f.path,filename:f.filename}));
     await question.save();
-    // console.log(req.user);
-    // console.log(question);
     req.flash('success','Question has been posted successfully');
     res.redirect(`/question/${question._id}`)
 }));
@@ -55,25 +47,25 @@ router.get('/question/:id/edit',isQuestionAuthor,catchAsync(async(req,res)=>{
     res.render('question/edit',{question});
 }));
 
-//updating the question
-router.put('/question/:id',catchAsync(async(req,res)=>{
-    const {id} = req.params;
-    const question = await query.findByIdAndUpdate(id,{...req.body.query});
-    console.log(req.body);
+// //updating the question
+// router.put('/question/:id',catchAsync(async(req,res)=>{
+//     const {id} = req.params;
+//     const question = await query.findByIdAndUpdate(id,{...req.body.query});
+//     console.log(req.body);
     
-    const imgs = req.files.map(f=>({url:f.path,filename:f.filename}));
-    question.images.push(...imgs);
-    await question.save();
-    // if(req.body.deleteImages){
-    //     for(let filename of req.body.deleteImages)
-    //     {
-    //         await cloudinary.uploader.destroy(filename);
-    //     }
-    //     await question.updateOne({$pull:{images:{filename:{$in:req.body.deleteImages } } } })  // uss image ko pull krlo campground mei se jiska filename h req.body.deleteImages ke andar
-    // }
-    req.flash('success','successfully updated the question')
-    res.redirect(`/question/${question._id}`)
-}));
+//     const imgs = req.files.map(f=>({url:f.path,filename:f.filename}));
+//     question.images.push(...imgs);
+//     await question.save();
+//     // if(req.body.deleteImages){
+//     //     for(let filename of req.body.deleteImages)
+//     //     {
+//     //         await cloudinary.uploader.destroy(filename);
+//     //     }
+//     //     await question.updateOne({$pull:{images:{filename:{$in:req.body.deleteImages } } } })  
+//     // }
+//     req.flash('success','successfully updated the question')
+//     res.redirect(`/question/${question._id}`)
+// }));
 
 //deleting the question
 router.delete('/question/:id',catchAsync(async(req,res)=>{

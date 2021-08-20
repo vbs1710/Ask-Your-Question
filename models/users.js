@@ -10,6 +10,6 @@ const userSchema = new Schema({
     }
 });
 
-userSchema.plugin(passportLocalMongoose);  // ye username aur password ke liye fields bana dega databse mei... sab kuch backside mei ho jaayega isse(basically humse hidden rhega humei bas method use krna h)...it will also take care that the usernames are unique...and it will also give some additional methods to use ....
+userSchema.plugin(passportLocalMongoose);  
 
 module.exports = mongoose.model('User',userSchema);
